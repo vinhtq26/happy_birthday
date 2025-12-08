@@ -362,7 +362,6 @@
 <body>
     <div class="magic-sparkles"></div>
     <div class="floating-hearts">
-        <!-- Hearts will be generated via CSS -->
         <div class="heart" style="--float-duration: 6s; --delay: 0s; --translate-x: 20px;">💝</div>
         <div class="heart" style="--float-duration: 8s; --delay: 1s; --translate-x: -30px;">💖</div>
         <div class="heart" style="--float-duration: 7s; --delay: 2s; --translate-x: 40px;">💗</div>
@@ -371,39 +370,56 @@
     </div>
 
     <section class="welcome">
-        <h1>Our Beautiful Moments Together</h1>
-        <p>Every moment spent with you has been magical. Let's cherish these precious memories ...</p>
+        <h1>For Someone Special ✨</h1>
+        <p>Some people leave a mark from the very first moment. This is my small way of saying I've noticed how amazing you are...</p>
     </section>
 
     <div class="memory-container">
         <div class="memory-card">
-            <img src="./d1.jpg" alt="First Date" class="memory-img">
-            <div class="memory-date">Her Smile Says It All</div>
-            <div class="memory-caption">You’re truly one of the sweetest girls I know, and I feel lucky to have a sis
-                like you.❤️</div>
+            <img src="./diemprofile.png" alt="Your Beautiful Smile" class="memory-img">
+            <div class="memory-date">That Beautiful Smile</div>
+            <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of making everything feel brighter. 😊</div>
         </div>
         <div class="memory-card">
-            <img src="./d2.jpg" alt="Beach Day" class="memory-img">
-            <div class="memory-date">Together Vibes</div>
-            <div class="memory-caption">May your journey ahead be filled with happiness, success, and endless
-                smiles.😊💕</div>
+            <img src="./diem2.png" alt="Your Style" class="memory-img">
+            <div class="memory-date">Your Unique Vibe</div>
+            <div class="memory-caption">There's something about your energy that's truly captivating. You seem like someone who makes every moment special. ✨</div>
         </div>
         <div class="memory-card">
-            <img src="./d3.jpg" alt="Movie Night" class="memory-img">
-            <div class="memory-date">Pretty Soul</div>
-            <div class="memory-caption">Keep being the amazing person you are—you make every moment brighter.🌸💖</div>
+            <img src="./diemprofile.png" alt="Your Spirit" class="memory-img">
+            <div class="memory-date">The Person You Are</div>
+            <div class="memory-caption">Even from our brief interactions, I can tell you're someone special. Kind, interesting, and genuinely wonderful. 💫</div>
         </div>
-
     </div>
 
     <section class="final-message">
-        <h2>Thank You for the Memories</h2>
-        <p>Every laugh, every chat, and every moment we’ve shared has been truly special.💫<br>
-            I’m so grateful for the bond we have, and for the positivity you always bring into my life.<br>
-            On your birthday, I just wish for endless happiness, love, and success to come your way.🌸</p>
-        <p>You deserve all the joy in the world—keep shining and spreading your beautiful energy.✨</p>
-        <a href="#" class="goodbye-btn">Until We Meet Again 💝</a>
+        <h2>Happy Birthday Diem! 🎂</h2>
+        <p>On your special day, I just wanted to say:<br>
+            You seem like an incredible person, and I'd love the chance to get to know you better.<br>
+            I hope your birthday is as amazing as you are, filled with joy, laughter, and wonderful moments. 🌸</p>
+        <p>If you're open to it sometime, I'd be really happy if we could grab coffee or chat more. No pressure at all - just genuine interest in knowing the person behind that beautiful smile. 💝</p>
+            <a href="#" class="goodbye-btn">Let Me Get to Know You <span id="curious-icon" style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♀️✨</span></a>
     </section>
+
+    <script>
+        // Optional: Add a simple click effect for the button
+        document.querySelector('.goodbye-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Happy birthday to you and thank you 😊');
+        });
+        
+        // Add a click animation for the icon
+        const curiousIcon = document.getElementById('curious-icon');
+        if (curiousIcon) {
+            curiousIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                curiousIcon.style.transform = 'scale(1.5) rotate(20deg)';
+                setTimeout(() => {
+                    curiousIcon.style.transform = '';
+                }, 300);
+            });
+        }
+    </script>
 </body>
 
 </html>
