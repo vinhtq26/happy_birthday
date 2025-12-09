@@ -527,6 +527,11 @@
                 setTimeout(() => {
                     curiousIcon.style.transform = '';
                 }, 300);
+                // Hiện popup khi click vào icon
+                launchFireworks();
+                setTimeout(() => {
+                    document.getElementById('custom-popup').style.display = 'flex';
+                }, 800);
             });
         }
     </script>
