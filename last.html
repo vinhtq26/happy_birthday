@@ -408,6 +408,23 @@
                 style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♀️✨</span></a>
         <canvas id="fireworks-canvas"
             style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;display:none;"></canvas>
+        <div id="custom-popup"
+            style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;">
+            <div
+                style="background:white;border-radius:20px;box-shadow:0 8px 32px rgba(255,105,180,0.3);padding:2rem 2.5rem;max-width:90vw;text-align:center;position:relative;animation:fadeInScale 0.5s;">
+                <span style="font-size:2.5rem;">🎉🎂💖</span>
+                <h3 style="font-family:'Dancing Script',cursive;color:#ff69b4;margin:1rem 0 0.5rem;">Happy Birthday!
+                </h3>
+                <p style="font-size:1.2rem;line-height:1.6;margin-bottom:1.5rem;">Wishing you a day filled with joy,
+                    laughter, and wonderful moments. Thank you for being amazing! 😊<br>
+                    <br>
+                    I hope that in the future, we can create many meaningful and memorable moments together!<br>
+                </p>
+                <button id="agree-popup"
+                    style="padding:0.7rem 2rem;font-size:1rem;background:linear-gradient(45deg,#ff69b4,#da70d6);color:white;border:none;border-radius:50px;cursor:pointer;box-shadow:0 2px 8px rgba(255,105,180,0.2);transition:background 0.3s,transform 0.2s;">Sounds
+                    lovely</button>
+            </div>
+        </div>
     </section>
 
     <script src="./config.js"></script>
@@ -487,8 +504,18 @@
             e.preventDefault();
             launchFireworks();
             setTimeout(() => {
-                alert('Happy birthday to you and thank you 😊');
+                document.getElementById('custom-popup').style.display = 'flex';
             }, 800);
+        });
+
+        // Đóng popup khi bấm nút Close hoặc click ra ngoài
+        document.getElementById('agree-popup').addEventListener('click', function () {
+            document.getElementById('custom-popup').style.display = 'none';
+        });
+        document.getElementById('custom-popup').addEventListener('click', function (e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
         });
 
         // Add a click animation for the icon
