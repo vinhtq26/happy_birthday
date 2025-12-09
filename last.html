@@ -371,47 +371,130 @@
 
     <section class="welcome">
         <h1>For Someone Special ✨</h1>
-        <p>Some people leave a mark from the very first moment. This is my small way of saying I've noticed how amazing you are...</p>
+        <p>Some people leave a mark from the very first moment. This is my small way of saying I've noticed how amazing
+            you are...</p>
     </section>
 
     <div class="memory-container">
         <div class="memory-card">
             <img src="./diemprofile.png" alt="Your Beautiful Smile" class="memory-img">
             <div class="memory-date">That Beautiful Smile</div>
-            <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of making everything feel brighter. 😊</div>
+            <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of making
+                everything feel brighter. 😊</div>
         </div>
         <div class="memory-card">
             <img src="./diem2.png" alt="Your Style" class="memory-img">
             <div class="memory-date">Your Unique Vibe</div>
-            <div class="memory-caption">There's something about your energy that's truly captivating. You seem like someone who makes every moment special. ✨</div>
+            <div class="memory-caption">There's something about your energy that's truly captivating. You seem like
+                someone who makes every moment special. ✨</div>
         </div>
         <div class="memory-card">
             <img src="./diemprofile.png" alt="Your Spirit" class="memory-img">
             <div class="memory-date">The Person You Are</div>
-            <div class="memory-caption">Even from our brief interactions, I can tell you're someone special. Kind, interesting, and genuinely wonderful. 💫</div>
+            <div class="memory-caption">Even from our brief interactions, I can tell you're someone special. Kind,
+                interesting, and genuinely wonderful. 💫</div>
         </div>
     </div>
 
+
     <section class="final-message">
-        <h2>Happy Birthday Diem! 🎂</h2>
+        <h2 id="birthday-title">Happy Birthday! 🎂</h2>
         <p>On your special day, I just wanted to say:<br>
             You seem like an incredible person, and I'd love the chance to get to know you better.<br>
             I hope your birthday is as amazing as you are, filled with joy, laughter, and wonderful moments. 🌸</p>
-        <p>If you're open to it sometime, I'd be really happy if we could grab coffee or chat more. No pressure at all - just genuine interest in knowing the person behind that beautiful smile. 💝</p>
-            <a href="#" class="goodbye-btn">Let Me Get to Know You <span id="curious-icon" style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♀️✨</span></a>
+        <p>If you're open to it sometime, I'd be really happy if we could grab coffee or chat more. No pressure at all -
+            just genuine interest in knowing the person behind that beautiful smile. 💝</p>
+        <a href="#" class="goodbye-btn">Let Me Get to Know You <span id="curious-icon"
+                style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♀️✨</span></a>
+        <canvas id="fireworks-canvas"
+            style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;display:none;"></canvas>
     </section>
 
+    <script src="./config.js"></script>
     <script>
-        // Optional: Add a simple click effect for the button
-        document.querySelector('.goodbye-btn').addEventListener('click', function(e) {
+        // Set name from config.js
+        if (typeof recipientName !== 'undefined') {
+            document.getElementById('birthday-title').innerHTML = `Happy Birthday ${recipientName}! 🎂`;
+        }
+
+        // Fireworks effect
+        function launchFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.display = 'block';
+
+            let particles = [];
+            const colors = ['#ff69b4', '#ffd700', '#00e6e6', '#ff6347', '#7cfc00', '#da70d6'];
+            function randomBetween(a, b) {
+                return a + Math.random() * (b - a);
+            }
+            function createFirework(x, y) {
+                const count = 60;
+                for (let i = 0; i < count; i++) {
+                    const angle = (Math.PI * 2 * i) / count;
+                    const speed = randomBetween(2, 6);
+                    particles.push({
+                        x, y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        alpha: 1,
+                        color: colors[Math.floor(Math.random() * colors.length)]
+                    });
+                }
+            }
+
+            // Tạo 5 cụm pháo hoa ở các vị trí khác nhau
+            createFirework(canvas.width / 2, canvas.height / 2);
+            createFirework(randomBetween(0.2, 0.8) * canvas.width, randomBetween(0.2, 0.4) * canvas.height);
+            createFirework(randomBetween(0.2, 0.8) * canvas.width, randomBetween(0.6, 0.8) * canvas.height);
+            createFirework(randomBetween(0.1, 0.3) * canvas.width, randomBetween(0.4, 0.6) * canvas.height);
+            createFirework(randomBetween(0.7, 0.9) * canvas.width, randomBetween(0.4, 0.6) * canvas.height);
+
+            let frame = 0;
+            const maxFrames = 300; // ~5s nếu 60fps
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.globalAlpha = p.alpha;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, 2 * Math.PI);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.96;
+                    p.vy *= 0.96;
+                    p.vy += 0.04; // gravity
+                    p.alpha -= 1 / maxFrames; // giảm alpha đều trong 5s
+                });
+                particles = particles.filter(p => p.alpha > 0);
+                frame++;
+                if (particles.length > 0 && frame < maxFrames) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.style.display = 'none';
+                }
+            }
+            animate();
+        }
+
+        // Add click effect for the button
+        document.querySelector('.goodbye-btn').addEventListener('click', function (e) {
             e.preventDefault();
-            alert('Happy birthday to you and thank you 😊');
+            launchFireworks();
+            setTimeout(() => {
+                alert('Happy birthday to you and thank you 😊');
+            }, 800);
         });
-        
+
         // Add a click animation for the icon
         const curiousIcon = document.getElementById('curious-icon');
         if (curiousIcon) {
-            curiousIcon.addEventListener('click', function(e) {
+            curiousIcon.addEventListener('click', function (e) {
                 e.stopPropagation();
                 curiousIcon.style.transform = 'scale(1.5) rotate(20deg)';
                 setTimeout(() => {
