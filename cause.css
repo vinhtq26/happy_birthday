@@ -41,6 +41,59 @@ body {
     z-index: 1;
 }
 
+.photo-marquee {
+    --marquee-duration: 18s;
+    width: 100%;
+    margin: 1.5rem auto 2rem;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 22px rgba(255, 105, 180, 0.12);
+    padding: 0.75rem 0;
+
+    /* Soft fade on edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.photo-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: photoMarquee var(--marquee-duration) linear infinite;
+}
+
+.photo-marquee:hover .photo-track {
+    animation-play-state: paused;
+}
+
+.photo-set {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 14px;
+}
+
+.photo-set img {
+    height: 120px;
+    width: auto;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateZ(0);
+}
+
+@keyframes photoMarquee {
+    from {
+        transform: translateX(-50%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
 h1 {
     font-family: 'Bubblegum Sans', cursive;
     font-size: 3rem;
@@ -139,26 +192,69 @@ h1 {
 }
 
 @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 @media (max-width: 768px) {
-    h1 { font-size: 2rem; }
-    .reason-card { margin: 1rem; }
-    .reason-text { font-size: 1rem; }
+    h1 {
+        font-size: 2rem;
+    }
+
+    .reason-card {
+        margin: 1rem;
+    }
+
+    .reason-text {
+        font-size: 1rem;
+    }
+
+    .photo-set img {
+        height: 88px;
+        border-radius: 14px;
+    }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-track {
+        animation: none;
+        transform: none;
+    }
+}
+
 .shuffle-button {
     background: linear-gradient(45deg, #ff69b4, #ff99cc);
     border: none;

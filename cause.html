@@ -7,6 +7,7 @@
     <title>Why You're My Best Friend! 💖</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="./cause.css">
+    <link rel="stylesheet" href="music.css">
     <style>
 
     </style>
@@ -22,6 +23,17 @@
 
     <div class="container">
         <h1>Happy Birthday Diem💖</h1>
+
+        <div class="photo-marquee" aria-label="Photo loop">
+            <div class="photo-track">
+                <div class="photo-set">
+                    <img src="./diemprofile.png" alt="Diem photo">
+                    <img src="./diem2.png" alt="Diem photo 2">
+                    <img src="./gif1.gif" alt="Memory gif 1">
+                    <img src="./gif2.gif" alt="Memory gif 2">
+                </div>
+            </div>
+        </div>
 
         <div id="reasons-container"></div>
 
@@ -39,6 +51,11 @@
     <script src="cause.js">
 
     </script>
+
+    <audio id="bg-music" src="./music/happy-birthday.mp3"></audio>
+    <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle music"
+        aria-pressed="false">♫</button>
+    <script src="music.js"></script>
 </body>
 
 </html>

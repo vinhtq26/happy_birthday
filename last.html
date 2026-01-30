@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Beautiful Memories ✨</title>
+    <link rel="stylesheet" href="music.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500;600&display=swap');
 
@@ -167,6 +168,58 @@
             gap: 2rem;
             z-index: 3;
             position: relative;
+        }
+
+        /* Infinite photo loop (left -> right) */
+        .memory-marquee {
+            --marquee-duration: 22s;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 0;
+            overflow: hidden;
+            z-index: 3;
+            position: relative;
+
+            /* Soft fade on edges */
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        }
+
+        .memory-track {
+            display: flex;
+            width: max-content;
+            will-change: transform;
+            animation: memoryMarquee var(--marquee-duration) linear infinite;
+        }
+
+        .memory-marquee:hover .memory-track {
+            animation-play-state: paused;
+        }
+
+        .memory-set {
+            display: flex;
+            align-items: stretch;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .memory-marquee .memory-card {
+            width: 320px;
+            flex: 0 0 auto;
+        }
+
+        .memory-marquee .memory-img {
+            height: 200px;
+        }
+
+        @keyframes memoryMarquee {
+            from {
+                transform: translateX(-50%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
         }
 
         .memory-card {
@@ -348,12 +401,27 @@
                 font-size: 3rem;
             }
 
-            .memory-container {
-                grid-template-columns: 1fr;
+            .memory-marquee {
+                padding: 1rem 0;
+            }
+
+            .memory-marquee .memory-card {
+                width: 260px;
+            }
+
+            .memory-marquee .memory-img {
+                height: 170px;
             }
 
             .final-message h2 {
                 font-size: 2.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .memory-track {
+                animation: none;
+                transform: none;
             }
         }
     </style>
@@ -375,24 +443,31 @@
             you are...</p>
     </section>
 
-    <div class="memory-container">
-        <div class="memory-card">
-            <img src="./diemprofile.png" alt="Your Beautiful Smile" class="memory-img">
-            <div class="memory-date">That Beautiful Smile</div>
-            <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of making
-                everything feel brighter. 😊</div>
-        </div>
-        <div class="memory-card">
-            <img src="./diem2.png" alt="Your Style" class="memory-img">
-            <div class="memory-date">Your Unique Vibe</div>
-            <div class="memory-caption">There's something about your energy that's truly captivating. You seem like
-                someone who makes every moment special. ✨</div>
-        </div>
-        <div class="memory-card">
-            <img src="./diemprofile.png" alt="Your Spirit" class="memory-img">
-            <div class="memory-date">The Person You Are</div>
-            <div class="memory-caption">Even from our brief interactions, I can tell you're someone special. Kind,
-                interesting, and genuinely wonderful. 💫</div>
+    <div class="memory-marquee" aria-label="Memory loop">
+        <div class="memory-track">
+            <div class="memory-set">
+                <div class="memory-card">
+                    <img src="./diemprofile.png" alt="Your Beautiful Smile" class="memory-img">
+                    <div class="memory-date">That Beautiful Smile</div>
+                    <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of
+                        making
+                        everything feel brighter. 😊</div>
+                </div>
+                <div class="memory-card">
+                    <img src="./diem2.png" alt="Your Style" class="memory-img">
+                    <div class="memory-date">Your Unique Vibe</div>
+                    <div class="memory-caption">There's something about your energy that's truly captivating. You seem
+                        like
+                        someone who makes every moment special. ✨</div>
+                </div>
+                <div class="memory-card">
+                    <img src="./diemprofile.png" alt="Your Spirit" class="memory-img">
+                    <div class="memory-date">The Person You Are</div>
+                    <div class="memory-caption">Even from our brief interactions, I can tell you're someone special.
+                        Kind,
+                        interesting, and genuinely wonderful. 💫</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -428,7 +503,31 @@
     </section>
 
     <script src="./config.js"></script>
+    <audio id="bg-music" src="./music/happy-birthday.mp3"></audio>
+    <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle music"
+        aria-pressed="false">♫</button>
+    <script src="music.js"></script>
     <script>
+        // Infinite memory loop (left -> right)
+        function initMemoryMarquee() {
+            const marquee = document.querySelector('.memory-marquee');
+            if (!marquee) return;
+
+            const track = marquee.querySelector('.memory-track');
+            const firstSet = marquee.querySelector('.memory-set');
+            if (!track || !firstSet) return;
+
+            // Ensure exactly 2 identical sets for a seamless loop
+            const sets = Array.from(track.querySelectorAll('.memory-set'));
+            sets.slice(1).forEach((node) => node.remove());
+
+            const clone = firstSet.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            track.appendChild(clone);
+        }
+
+        window.addEventListener('load', initMemoryMarquee);
+
         // Set name from config.js
         if (typeof recipientName !== 'undefined') {
             document.getElementById('birthday-title').innerHTML = `Happy Birthday ${recipientName}! 🎂`;

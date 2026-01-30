@@ -146,3 +146,23 @@ document.addEventListener('mousemove', (e) => {
 
 // Create initial floating elements
 setInterval(createFloatingElement, 2000);
+
+// Infinite photo loop (left -> right)
+function initPhotoMarquee() {
+    const marquee = document.querySelector('.photo-marquee');
+    if (!marquee) return;
+
+    const track = marquee.querySelector('.photo-track');
+    const firstSet = marquee.querySelector('.photo-set');
+    if (!track || !firstSet) return;
+
+    // Ensure exactly 2 identical sets for a seamless loop
+    const sets = Array.from(track.querySelectorAll('.photo-set'));
+    sets.slice(1).forEach((node) => node.remove());
+
+    const clone = firstSet.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    track.appendChild(clone);
+}
+
+window.addEventListener('load', initPhotoMarquee);
