@@ -1,3 +1,3 @@
 // config.js
 // Thay đổi tên ở đây
-const recipientName = "Diem";
+const recipientName = "Hung";

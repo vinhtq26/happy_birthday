@@ -209,7 +209,7 @@
         }
 
         .memory-marquee .memory-img {
-            height: 200px;
+            height: 230px;
         }
 
         @keyframes memoryMarquee {
@@ -257,9 +257,21 @@
             width: 100%;
             height: 250px;
             object-fit: cover;
+            object-position: 50% 50%;
             border-radius: 15px;
             margin-bottom: 1rem;
             transition: transform 0.5s ease;
+        }
+
+        .memory-img.hb-portrait {
+            object-position: 50% var(--hb-focus-y, 10%);
+        }
+
+        /* For photos that would crop the face: show the whole image */
+        .memory-img.hb-contain {
+            object-fit: contain;
+            object-position: 50% 50%;
+            background: rgba(255, 255, 255, 0.55);
         }
 
         .memory-card:hover .memory-img {
@@ -446,27 +458,7 @@
     <div class="memory-marquee" aria-label="Memory loop">
         <div class="memory-track">
             <div class="memory-set">
-                <div class="memory-card">
-                    <img src="./diemprofile.png" alt="Your Beautiful Smile" class="memory-img">
-                    <div class="memory-date">That Beautiful Smile</div>
-                    <div class="memory-caption">The first thing I noticed about you was your smile - it has a way of
-                        making
-                        everything feel brighter. 😊</div>
-                </div>
-                <div class="memory-card">
-                    <img src="./diem2.png" alt="Your Style" class="memory-img">
-                    <div class="memory-date">Your Unique Vibe</div>
-                    <div class="memory-caption">There's something about your energy that's truly captivating. You seem
-                        like
-                        someone who makes every moment special. ✨</div>
-                </div>
-                <div class="memory-card">
-                    <img src="./diemprofile.png" alt="Your Spirit" class="memory-img">
-                    <div class="memory-date">The Person You Are</div>
-                    <div class="memory-caption">Even from our brief interactions, I can tell you're someone special.
-                        Kind,
-                        interesting, and genuinely wonderful. 💫</div>
-                </div>
+                <!-- Populated by JS from ./images/* -->
             </div>
         </div>
     </div>
@@ -507,7 +499,96 @@
     <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle music"
         aria-pressed="false">♫</button>
     <script src="music.js"></script>
+    <script src="image-focus.js"></script>
     <script>
+        function buildMemoryCards() {
+            const setEl = document.querySelector('.memory-set');
+            if (!setEl) return;
+
+            // Use ALL images in ./images (static list)
+            // Note: keep URL-encoding for spaces.
+            const imageFiles = [
+                'image.png',
+                'image%20copy.png',
+                'image%20copy%202.png',
+                'image%20copy%203.png',
+                'image%20copy%204.png',
+                'image%20copy%205.png',
+                'image%20copy%206.png',
+                'image%20copy%207.png',
+                'image%20copy%208.png',
+                'image%20copy%209.png',
+                'image%20copy%2010.png',
+            ];
+
+            const titleTemplates = [
+                'Khoảnh khắc đáng yêu',
+                'Nụ cười hôm ấy',
+                'Một ngày thật xinh',
+                'Góc nhìn dịu dàng',
+                'Kỷ niệm nhỏ, thương nhiều',
+                'Vibe đặc biệt',
+                'Một chút bình yên',
+                'Đáng nhớ lắm',
+                'Tự nhiên mà đẹp',
+                'Chạm vào trái tim',
+                'Một bức ảnh, nhiều cảm xúc',
+            ];
+
+            const captionTemplates = [
+                'Nhìn ảnh là thấy cả một bầu trời dễ thương. 💗',
+                'Khoảnh khắc này làm mình vui lây luôn. ✨',
+                'Một chút dịu dàng để ngày đẹp hơn. 🌸',
+                'Đẹp nhất là khi mọi thứ thật tự nhiên. 😊',
+                'Lưu lại để sau này nhớ mà cười. 💖',
+                'Cảm giác nhẹ nhàng nhưng đáng nhớ. 💫',
+                'Chỉ cần vậy thôi là đủ ấm áp rồi. 🫶',
+                'Một tấm ảnh, một câu chuyện nhỏ. 🎞️',
+                'Xinh theo cách rất riêng. 🌷',
+                'Gửi vào đây một chút yêu thương. 🌟',
+                'Mình thích vibe của tấm này cực. 💞',
+            ];
+
+            // Clear existing
+            setEl.innerHTML = '';
+
+            imageFiles.forEach((file, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+
+                const img = document.createElement('img');
+                img.className = 'memory-img';
+                img.src = `./images/${file}`;
+
+                // Force show full photo for items 04-11 (avoid cropping faces)
+                // index is 0-based => 04 is index 3
+                if (index >= 3) {
+                    img.classList.add('hb-contain');
+                }
+
+                const n = index + 1;
+                const fileLabel = decodeURIComponent(file)
+                    .replace(/\.[a-z0-9]+$/i, '')
+                    .replace(/_/g, ' ')
+                    .trim();
+                const titleBase = titleTemplates[index % titleTemplates.length];
+                img.alt = `Memory ${String(n).padStart(2, '0')}: ${fileLabel || titleBase}`;
+
+                const date = document.createElement('div');
+                date.className = 'memory-date';
+                date.textContent = `${titleBase} #${String(n).padStart(2, '0')}`;
+
+                const cap = document.createElement('div');
+                cap.className = 'memory-caption';
+                cap.textContent = captionTemplates[index % captionTemplates.length];
+
+                card.appendChild(img);
+                card.appendChild(date);
+                card.appendChild(cap);
+                setEl.appendChild(card);
+            });
+        }
+
         // Infinite memory loop (left -> right)
         function initMemoryMarquee() {
             const marquee = document.querySelector('.memory-marquee');
@@ -526,7 +607,10 @@
             track.appendChild(clone);
         }
 
-        window.addEventListener('load', initMemoryMarquee);
+        window.addEventListener('load', () => {
+            buildMemoryCards();
+            initMemoryMarquee();
+        });
 
         // Set name from config.js
         if (typeof recipientName !== 'undefined') {
@@ -536,81 +620,247 @@
         // Fireworks effect
         function launchFireworks() {
             const canvas = document.getElementById('fireworks-canvas');
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+
+            // Cancel any previous show
+            if (window.__hbFireworksRAF) {
+                cancelAnimationFrame(window.__hbFireworksRAF);
+                window.__hbFireworksRAF = null;
+            }
+
+            // Total duration control
+            const TOTAL_MS = 8000; // tổng thời gian bắn ~ 8 giây
+            const FINALE_AT_MS = Math.round(TOTAL_MS * 0.55); // finale bắt đầu sớm hơn để kịp kết thúc
+            const END_AT_MS = TOTAL_MS;
+
+            // Make it softer (less eye-straining) but still colorful
+            const MASTER_INTENSITY = 0.56;
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            resize();
             canvas.style.display = 'block';
 
-            let particles = [];
+            // Avoid pure white to reduce glare
             const colors = ['#ff69b4', '#ffd700', '#00e6e6', '#ff6347', '#7cfc00', '#da70d6'];
-            function randomBetween(a, b) {
-                return a + Math.random() * (b - a);
-            }
-            function createFirework(x, y) {
-                const count = 60;
+            const randomBetween = (a, b) => a + Math.random() * (b - a);
+            const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+            const rockets = [];
+            let particles = [];
+            let lastRocketAt = 0;
+            let startAt = performance.now();
+            let currentFinaleProgress = 0;
+
+            function createExplosion(x, y, intensity) {
+                let baseCount = intensity === 'finale' ? 130 : 70;
+                if (intensity === 'finale') {
+                    // Taper particle amount near the end so it looks less dense
+                    const taper = 1 - 0.40 * currentFinaleProgress; // 1.0 -> 0.60
+                    baseCount *= taper;
+                }
+                const count = Math.floor(baseCount * randomBetween(0.85, 1.10));
+                const color = pick(colors);
+
                 for (let i = 0; i < count; i++) {
-                    const angle = (Math.PI * 2 * i) / count;
-                    const speed = randomBetween(2, 6);
+                    const angle = (Math.PI * 2 * i) / count + randomBetween(-0.03, 0.03);
+                    const speed = (intensity === 'finale' ? randomBetween(2.0, 7.2) : randomBetween(1.4, 5.4)) * (Math.random() < 0.06 ? 1.25 : 1);
+                    const size = randomBetween(0.9, intensity === 'finale' ? 2.2 : 1.9);
+                    const life = intensity === 'finale' ? randomBetween(68, 112) : randomBetween(55, 98);
+
                     particles.push({
-                        x, y,
+                        x,
+                        y,
                         vx: Math.cos(angle) * speed,
                         vy: Math.sin(angle) * speed,
                         alpha: 1,
-                        color: colors[Math.floor(Math.random() * colors.length)]
+                        color,
+                        size,
+                        life,
+                        maxLife: life,
+                        twinkle: Math.random() < 0.14,
                     });
                 }
-            }
 
-            // Tạo 5 cụm pháo hoa ở các vị trí khác nhau
-            createFirework(canvas.width / 2, canvas.height / 2);
-            createFirework(randomBetween(0.2, 0.8) * canvas.width, randomBetween(0.2, 0.4) * canvas.height);
-            createFirework(randomBetween(0.2, 0.8) * canvas.width, randomBetween(0.6, 0.8) * canvas.height);
-            createFirework(randomBetween(0.1, 0.3) * canvas.width, randomBetween(0.4, 0.6) * canvas.height);
-            createFirework(randomBetween(0.7, 0.9) * canvas.width, randomBetween(0.4, 0.6) * canvas.height);
-
-            let frame = 0;
-            const maxFrames = 300; // ~5s nếu 60fps
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    ctx.globalAlpha = p.alpha;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, 3, 0, 2 * Math.PI);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
-                });
-                particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vx *= 0.96;
-                    p.vy *= 0.96;
-                    p.vy += 0.04; // gravity
-                    p.alpha -= 1 / maxFrames; // giảm alpha đều trong 5s
-                });
-                particles = particles.filter(p => p.alpha > 0);
-                frame++;
-                if (particles.length > 0 && frame < maxFrames) {
-                    requestAnimationFrame(animate);
-                } else {
-                    canvas.style.display = 'none';
+                // Optional second ring for fuller look
+                if (intensity === 'finale' && Math.random() < 0.30) {
+                    const ringCount = Math.floor(randomBetween(16, 26));
+                    const ringColor = pick(colors);
+                    for (let i = 0; i < ringCount; i++) {
+                        const angle = (Math.PI * 2 * i) / ringCount;
+                        const speed = randomBetween(2.4, 4.8);
+                        const life = randomBetween(54, 90);
+                        particles.push({
+                            x,
+                            y,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            alpha: 1,
+                            color: ringColor,
+                            size: randomBetween(1.0, 1.9),
+                            life,
+                            maxLife: life,
+                            twinkle: true,
+                        });
+                    }
                 }
             }
-            animate();
+
+            function spawnRocket(intensity) {
+                const w = canvas.width;
+                const h = canvas.height;
+
+                const x = randomBetween(0.12, 0.88) * w;
+                const y = h + randomBetween(10, 80);
+                const targetY = randomBetween(intensity === 'finale' ? 0.14 : 0.22, intensity === 'finale' ? 0.52 : 0.48) * h;
+                const vx = randomBetween(-0.7, 0.7);
+                const vy = -randomBetween(intensity === 'finale' ? 10.5 : 8.0, intensity === 'finale' ? 15.0 : 12.0);
+                const color = pick(colors);
+                rockets.push({
+                    x,
+                    y,
+                    prevX: x,
+                    prevY: y,
+                    vx,
+                    vy,
+                    targetY,
+                    color,
+                    exploded: false,
+                });
+            }
+
+            function step(now) {
+                const t = now - startAt;
+                const w = canvas.width;
+                const h = canvas.height;
+
+                // Fade previous frame without painting a black rectangle (keeps background visible)
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.26)';
+                ctx.fillRect(0, 0, w, h);
+                // Draw in normal mode to reduce glare
+                ctx.globalCompositeOperation = 'source-over';
+
+                const intensity = t >= FINALE_AT_MS ? 'finale' : 'slow';
+                currentFinaleProgress = intensity === 'finale'
+                    ? Math.max(0, Math.min(1, (t - FINALE_AT_MS) / Math.max(1, (END_AT_MS - FINALE_AT_MS))))
+                    : 0;
+
+                // Finale starts dense, then thins out near the end
+                const spawnInterval = intensity === 'finale'
+                    ? Math.round(160 + currentFinaleProgress * 290) // 160ms -> 450ms
+                    : 950;
+
+                if (t < END_AT_MS && now - lastRocketAt >= spawnInterval) {
+                    spawnRocket(intensity);
+                    lastRocketAt = now;
+                    const extraChance = 0.40 * (1 - 0.85 * currentFinaleProgress);
+                    if (intensity === 'finale' && Math.random() < extraChance) {
+                        // Extra rockets during finale
+                        spawnRocket(intensity);
+                    }
+                }
+
+                // Update & draw rockets
+                for (let i = rockets.length - 1; i >= 0; i--) {
+                    const r = rockets[i];
+                    r.prevX = r.x;
+                    r.prevY = r.y;
+                    r.x += r.vx;
+                    r.y += r.vy;
+                    r.vy += 0.10; // gravity pulls rocket down slightly near peak
+
+                    // Trail
+                    ctx.globalAlpha = 0.34 * MASTER_INTENSITY;
+                    ctx.strokeStyle = r.color;
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(r.prevX, r.prevY);
+                    ctx.lineTo(r.x, r.y);
+                    ctx.stroke();
+
+                    // Small spark at the rocket head
+                    ctx.globalAlpha = 0.55 * MASTER_INTENSITY;
+                    ctx.fillStyle = r.color;
+                    ctx.beginPath();
+                    ctx.arc(r.x, r.y, 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    const reachedPeak = r.y <= r.targetY || r.vy >= -0.5;
+                    if (reachedPeak && !r.exploded) {
+                        r.exploded = true;
+                        createExplosion(r.x, r.y, intensity);
+                        rockets.splice(i, 1);
+                    }
+                }
+
+                // Update & draw particles
+                const drag = 0.985;
+                const gravity = 0.06;
+
+                // Slight additive only for particles (low alpha), keeps colors vivid without harsh glare
+                ctx.globalCompositeOperation = 'lighter';
+
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= drag;
+                    p.vy = p.vy * drag + gravity;
+                    p.life -= 1;
+
+                    const lifeRatio = p.life / p.maxLife;
+                    let alpha = Math.max(0, Math.min(1, lifeRatio));
+                    if (p.twinkle) alpha *= randomBetween(0.6, 1);
+                    p.alpha = alpha;
+
+                    const softness = intensity === 'finale' ? 0.48 : 0.64;
+                    ctx.globalAlpha = p.alpha * softness * MASTER_INTENSITY;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (p.life <= 0 || p.alpha <= 0.01 || p.x < -50 || p.x > w + 50 || p.y > h + 80) {
+                        particles.splice(i, 1);
+                    }
+                }
+
+                // Finish when done
+                if (t >= END_AT_MS && rockets.length === 0 && particles.length === 0) {
+                    canvas.style.display = 'none';
+                    window.__hbFireworksRAF = null;
+                    return;
+                }
+
+                window.__hbFireworksRAF = requestAnimationFrame(step);
+            }
+
+            window.addEventListener('resize', resize, { passive: true });
+            window.__hbFireworksRAF = requestAnimationFrame(step);
         }
 
         // Add click effect for the button
         document.querySelector('.goodbye-btn').addEventListener('click', function (e) {
             e.preventDefault();
-            launchFireworks();
             setTimeout(() => {
                 document.getElementById('custom-popup').style.display = 'flex';
             }, 800);
         });
 
-        // Đóng popup khi bấm nút Close hoặc click ra ngoài
+        // Bắn pháo hoa khi bấm "Sounds lovely"
         document.getElementById('agree-popup').addEventListener('click', function () {
-            document.getElementById('custom-popup').style.display = 'none';
+            launchFireworks();
+            setTimeout(() => {
+                document.getElementById('custom-popup').style.display = 'none';
+            }, 120);
         });
+
+        // Đóng popup khi click ra ngoài
         document.getElementById('custom-popup').addEventListener('click', function (e) {
             if (e.target === this) {
                 this.style.display = 'none';
@@ -627,7 +877,6 @@
                     curiousIcon.style.transform = '';
                 }, 300);
                 // Hiện popup khi click vào icon
-                launchFireworks();
                 setTimeout(() => {
                     document.getElementById('custom-popup').style.display = 'flex';
                 }, 800);

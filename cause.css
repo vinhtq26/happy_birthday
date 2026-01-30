@@ -76,12 +76,25 @@ body {
 }
 
 .photo-set img {
-    height: 120px;
-    width: auto;
+    width: 140px;
+    height: 140px;
     border-radius: 16px;
     object-fit: cover;
+    object-position: 50% 50%;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     transform: translateZ(0);
+}
+
+/* Portrait images: keep face higher in frame */
+img.hb-portrait {
+    object-position: 50% var(--hb-focus-y, 10%);
+}
+
+.gif-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% var(--hb-focus-y, 10%);
 }
 
 @keyframes photoMarquee {
@@ -191,6 +204,14 @@ h1 {
     transform: scale(0);
 }
 
+.teddy-hug img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    object-position: 50% var(--hb-focus-y, 10%);
+    border-radius: 20px;
+}
+
 @keyframes gradientBG {
     0% {
         background-position: 0% 50%;
@@ -243,7 +264,8 @@ h1 {
     }
 
     .photo-set img {
-        height: 88px;
+        width: 104px;
+        height: 104px;
         border-radius: 14px;
     }
 }

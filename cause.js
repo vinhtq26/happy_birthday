@@ -1,24 +1,24 @@
 // Reasons database
 const reasons = [
     {
-        text: "Happy Birthday, Diem! 🎉 Hope your day is filled with little joys, sweet moments, and lots of smiles!",
+        text: "Happy Birthday, Hung ! 🎉 Hope your day is filled with little joys, sweet moments, and lots of smiles!",
         emoji: "🎂",
-        gif: "gif1.gif"
+        gif: "./images/image%20copy%205.png"
     },
     {
         text: "Wishing you a wonderful birthday! 🌸 May this new age bring you even more happiness, confidence, and beautiful memories.",
         emoji: "✨",
-        gif: "gif2.gif"
+        gif: "./images/image%20copy%206.png"
     },
     {
         text: "Hope you have an amazing birthday celebration surrounded by loved ones! Cheers to a fantastic year ahead! 🥳",
         emoji: "💫",
-        gif: "gif1.gif"
+        gif: "./images/image%20copy%207.png"
     },
     {
-        text: "Happy Birthday Diem! 🎂 It's nice getting to know you, and I hope we can chat more soon! 😊",
+        text: "Happy Birthday Hung ! 🎂 It's nice getting to know you, and I hope we can chat more soon! 😊",
         emoji: "🎈",
-        gif: "gif2.gif"
+        gif: "./images/image%20copy%208.png"
     }
 ];
 
