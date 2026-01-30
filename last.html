@@ -496,6 +496,7 @@
 
     <script src="./config.js"></script>
     <audio id="bg-music" src="./music/happy-birthday.mp3"></audio>
+    <audio id="fireworks-sfx" src="./music/new-year.mp3" preload="auto"></audio>
     <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle music"
         aria-pressed="false">♫</button>
     <script src="music.js"></script>
@@ -630,8 +631,8 @@
             }
 
             // Total duration control
-            const TOTAL_MS = 8000; // tổng thời gian bắn ~ 8 giây
-            const FINALE_AT_MS = Math.round(TOTAL_MS * 0.55); // finale bắt đầu sớm hơn để kịp kết thúc
+            const TOTAL_MS = 34000; // tổng thời gian bắn ~ 34 giây
+            const FINALE_AT_MS = 8000; // bắn chậm trước, đến mốc 8s thì "bung"
             const END_AT_MS = TOTAL_MS;
 
             // Make it softer (less eye-straining) but still colorful
@@ -844,6 +845,23 @@
             window.__hbFireworksRAF = requestAnimationFrame(step);
         }
 
+        function playFireworksSfx() {
+            const sfx = document.getElementById('fireworks-sfx');
+            if (!sfx) return;
+            sfx.volume = 0.85;
+            try {
+                sfx.currentTime = 0;
+            } catch {
+                // ignore
+            }
+            const p = sfx.play();
+            if (p && typeof p.catch === 'function') {
+                p.catch(() => {
+                    // ignore autoplay/gesture issues
+                });
+            }
+        }
+
         // Add click effect for the button
         document.querySelector('.goodbye-btn').addEventListener('click', function (e) {
             e.preventDefault();
@@ -854,6 +872,7 @@
 
         // Bắn pháo hoa khi bấm "Sounds lovely"
         document.getElementById('agree-popup').addEventListener('click', function () {
+            playFireworksSfx();
             launchFireworks();
             setTimeout(() => {
                 document.getElementById('custom-popup').style.display = 'none';
