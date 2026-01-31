@@ -1,33 +1,38 @@
-# 🎂 Happy Birthday Mini Website 🎉  
+# 🎂 Happy Birthday Mini Website 🎉
 
-A beautiful, interactive mini website I built to celebrate my girlfriend’s special day ❤️.  
-This project is made with **HTML, CSS, and JavaScript** and includes animations, surprises, and heartfelt wishes.  
+An interactive mini website that delivers a warm birthday greeting from the whole family to their son ❤️.
 
-✨ Anyone can use this project to create a unique online birthday greeting for their loved one!  
-
----
-
-## 🚀 Live Demo  
-👉 [Click here to view the site](https://nikitayadav19.github.io/HappyBirthdayGF)  
+Built with **HTML, CSS, and JavaScript**, including animations, surprises, and heartfelt wishes.
 
 ---
 
-
-## 🎁 Features   
-- 💌 Heartfelt birthday message with typewriter effect  
-- 🌟 Responsive design (works on phone & desktop)  
-- ✨ Easy to customize for anyone  
-
----
-
-## 🛠️ Tech Stack  
-- **HTML5**  
-- **CSS3** (with animations)  
-- **JavaScript**  
+## 🎁 Features
+- 💌 Typewriter-style greeting
+- 🌟 Responsive design (phone & desktop)
+- ✨ Easy to customize (name, messages, photos, music)
 
 ---
 
-## 🎉 How to Use  
-1. Clone the repo:  
+## 🛠️ Tech Stack
+- **HTML5**
+- **CSS3** (animations)
+- **JavaScript**
+
+---
+
+## 🚀 Run Locally
+1. Start a static server (macOS / Linux):
    ```bash
-   git clone https://github.com/nikitayadav19/HappyBirthdayGF.git
+   cd happy_birthday
+   python3 -m http.server 5500
+   ```
+
+2. Open `http://localhost:5500`
+
+---
+
+## ✏️ Customize
+- Change the recipient name in [config.js](config.js)
+- Edit the greeting text in [script.js](script.js)
+- Edit the message cards in [cause.js](cause.js)
+- Replace photos in `./images/` (keep filenames or update references in the HTML)

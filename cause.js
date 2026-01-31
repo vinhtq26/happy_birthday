@@ -1,22 +1,22 @@
 // Reasons database
 const reasons = [
     {
-        text: "Happy Birthday, Hung ! 🎉 Hope your day is filled with little joys, sweet moments, and lots of smiles!",
+        text: "Happy birthday, our dear son! Wishing you a new year full of health, peace, and joy in the little things each day.",
         emoji: "🎂",
         gif: "./images/image%20copy%205.png"
     },
     {
-        text: "Wishing you a wonderful birthday! 🌸 May this new age bring you even more happiness, confidence, and beautiful memories.",
+        text: "We’re proud of the person you’re becoming. Whatever path you choose, stay curious, work hard, and be kind — you’ll go far.",
         emoji: "✨",
         gif: "./images/image%20copy%206.png"
     },
     {
-        text: "Hope you have an amazing birthday celebration surrounded by loved ones! Cheers to a fantastic year ahead! 🥳",
+        text: "In this new year, may you grow stronger and more confident, and keep a warm heart. Home will always be a place you can return to.",
         emoji: "💫",
         gif: "./images/image%20copy%207.png"
     },
     {
-        text: "Happy Birthday Hung ! 🎂 It's nice getting to know you, and I hope we can chat more soon! 😊",
+        text: "If you ever feel tired or overwhelmed, talk to us. We may not be able to do everything for you, but we’ll always listen and help you find a way.",
         emoji: "🎈",
         gif: "./images/image%20copy%208.png"
     }
@@ -40,7 +40,7 @@ function createReasonCard(reason) {
 
     const gifOverlay = document.createElement('div');
     gifOverlay.className = 'gif-overlay';
-    gifOverlay.innerHTML = `<img src="${reason.gif}" alt="Friendship Memory">`;
+    gifOverlay.innerHTML = `<img src="${reason.gif}" alt="Family memory">`;
 
     card.appendChild(text);
     card.appendChild(gifOverlay);
@@ -65,7 +65,7 @@ function displayNewReason() {
         reasonsContainer.appendChild(card);
 
         // Update counter
-        reasonCounter.textContent = `Reason ${currentReasonIndex + 1} of ${reasons.length}`;
+        reasonCounter.textContent = `Message ${currentReasonIndex + 1} / ${reasons.length}`;
 
         currentReasonIndex++;
 
@@ -76,7 +76,7 @@ function displayNewReason() {
                 duration: 0.5,
                 ease: "elastic.out",
                 onComplete: () => {
-                    shuffleButton.textContent = "Enter Storylane 💫";
+                    shuffleButton.textContent = "See our final birthday wish 💫";
                     shuffleButton.classList.add('story-mode');
                     shuffleButton.addEventListener('click', () => {
                         gsap.to('body', {

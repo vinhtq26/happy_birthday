@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Beautiful Memories ✨</title>
+    <title>Family Memories ✨</title>
     <link rel="stylesheet" href="music.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500;600&display=swap');
@@ -450,9 +450,9 @@
     </div>
 
     <section class="welcome">
-        <h1>For Someone Special ✨</h1>
-        <p>Some people leave a mark from the very first moment. This is my small way of saying I've noticed how amazing
-            you are...</p>
+        <h1>To our dear son ✨</h1>
+        <p>You’re another year older. We don’t need you to be the best at everything — we just hope you keep trying,
+            live with kindness, and learn to take care of yourself. We’re always here when you need us.</p>
     </section>
 
     <div class="memory-marquee" aria-label="Memory loop">
@@ -466,13 +466,13 @@
 
     <section class="final-message">
         <h2 id="birthday-title">Happy Birthday! 🎂</h2>
-        <p>On your special day, I just wanted to say:<br>
-            You seem like an incredible person, and I'd love the chance to get to know you better.<br>
-            I hope your birthday is as amazing as you are, filled with joy, laughter, and wonderful moments. 🌸</p>
-        <p>If you're open to it sometime, I'd be really happy if we could grab coffee or chat more. No pressure at all -
-            just genuine interest in knowing the person behind that beautiful smile. 💝</p>
-        <a href="#" class="goodbye-btn">Let Me Get to Know You <span id="curious-icon"
-                style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♀️✨</span></a>
+        <p>Today is your day, and we just want to tell you a few things:<br>
+            Keep being brave, calm, and persistent. Success is built from small steps every day.<br>
+            Whether you feel happy or sad, your family will always be a place you can come back to. 🌸</p>
+        <p>We hope you grow into a kind young man — responsible, loving, and never giving up when things get tough.
+            We believe in you. 💝</p>
+        <a href="#" class="goodbye-btn">Tap here <span id="curious-icon"
+                style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♂️✨</span></a>
         <canvas id="fireworks-canvas"
             style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;display:none;"></canvas>
         <div id="custom-popup"
@@ -480,16 +480,18 @@
             <div
                 style="background:white;border-radius:20px;box-shadow:0 8px 32px rgba(255,105,180,0.3);padding:2rem 2.5rem;max-width:90vw;text-align:center;position:relative;animation:fadeInScale 0.5s;">
                 <span style="font-size:2.5rem;">🎉🎂💖</span>
-                <h3 style="font-family:'Dancing Script',cursive;color:#ff69b4;margin:1rem 0 0.5rem;">Happy Birthday!
+                <h3 style="font-family:'Dancing Script',cursive;color:#ff69b4;margin:1rem 0 0.5rem;">Happy birthday,
+                    our son!
                 </h3>
-                <p style="font-size:1.2rem;line-height:1.6;margin-bottom:1.5rem;">Wishing you a day filled with joy,
-                    laughter, and wonderful moments. Thank you for being amazing! 😊<br>
+                <p style="font-size:1.2rem;line-height:1.6;margin-bottom:1.5rem;">Thank you for being in our lives and
+                    growing into such a wonderful kid. We wish you good health, confidence, and happiness — in school,
+                    at work, and in everything you do. 😊<br>
                     <br>
-                    I hope that in the future, we can create many meaningful and memorable moments together!<br>
+                    Whenever you need it, come home — we’ll always be here for you. ❤️<br>
                 </p>
                 <button id="agree-popup"
-                    style="padding:0.7rem 2rem;font-size:1rem;background:linear-gradient(45deg,#ff69b4,#da70d6);color:white;border:none;border-radius:50px;cursor:pointer;box-shadow:0 2px 8px rgba(255,105,180,0.2);transition:background 0.3s,transform 0.2s;">Sounds
-                    lovely</button>
+                    style="padding:0.7rem 2rem;font-size:1rem;background:linear-gradient(45deg,#ff69b4,#da70d6);color:white;border:none;border-radius:50px;cursor:pointer;box-shadow:0 2px 8px rgba(255,105,180,0.2);transition:background 0.3s,transform 0.2s;">Aww,
+                    thank you</button>
             </div>
         </div>
     </section>
@@ -523,31 +525,31 @@
             ];
 
             const titleTemplates = [
-                'Khoảnh khắc đáng yêu',
-                'Nụ cười hôm ấy',
-                'Một ngày thật xinh',
-                'Góc nhìn dịu dàng',
-                'Kỷ niệm nhỏ, thương nhiều',
-                'Vibe đặc biệt',
-                'Một chút bình yên',
-                'Đáng nhớ lắm',
-                'Tự nhiên mà đẹp',
-                'Chạm vào trái tim',
-                'Một bức ảnh, nhiều cảm xúc',
+                'The day you grew a little more',
+                'Your smile',
+                'A day to remember',
+                'A peaceful moment',
+                'Family memories',
+                'Our brave boy',
+                'So proud of you',
+                'Growing up',
+                'One photo, one story',
+                'So much love',
+                'You are a gift',
             ];
 
             const captionTemplates = [
-                'Nhìn ảnh là thấy cả một bầu trời dễ thương. 💗',
-                'Khoảnh khắc này làm mình vui lây luôn. ✨',
-                'Một chút dịu dàng để ngày đẹp hơn. 🌸',
-                'Đẹp nhất là khi mọi thứ thật tự nhiên. 😊',
-                'Lưu lại để sau này nhớ mà cười. 💖',
-                'Cảm giác nhẹ nhàng nhưng đáng nhớ. 💫',
-                'Chỉ cần vậy thôi là đủ ấm áp rồi. 🫶',
-                'Một tấm ảnh, một câu chuyện nhỏ. 🎞️',
-                'Xinh theo cách rất riêng. 🌷',
-                'Gửi vào đây một chút yêu thương. 🌟',
-                'Mình thích vibe của tấm này cực. 💞',
+                'We saved this moment so one day we can look back and see how much you’ve grown. 💗',
+                'As long as you’re healthy and happy, that’s everything to us. ✨',
+                'Some days are ordinary, but they become precious memories. 🌸',
+                'Just be yourself — be kind, and keep trying every day. 😊',
+                'Watching you grow up makes us both happy and emotional. 💖',
+                'Wherever you go, we’ll always support you. 💫',
+                'If you’re tired, take a little rest — then we keep going. 🫶',
+                'One photo, one chapter. We’re proud of you. 🎞️',
+                'The older you get, the braver you become. We believe in you. 🌷',
+                'We love you so much, and we always want you to be happy. 🌟',
+                'Happy birthday — may your new year shine bright. 💞',
             ];
 
             // Clear existing
@@ -631,8 +633,8 @@
             }
 
             // Total duration control
-            const TOTAL_MS = 34000; // tổng thời gian bắn ~ 34 giây
-            const FINALE_AT_MS = 8000; // bắn chậm trước, đến mốc 8s thì "bung"
+            const TOTAL_MS = 34000; // total duration ~ 34 seconds
+            const FINALE_AT_MS = 8000; // slow at first, then “finale” after 8s
             const END_AT_MS = TOTAL_MS;
 
             // Make it softer (less eye-straining) but still colorful
@@ -870,7 +872,7 @@
             }, 800);
         });
 
-        // Bắn pháo hoa khi bấm "Sounds lovely"
+        // Launch fireworks when the popup button is clicked
         document.getElementById('agree-popup').addEventListener('click', function () {
             playFireworksSfx();
             launchFireworks();
@@ -879,7 +881,7 @@
             }, 120);
         });
 
-        // Đóng popup khi click ra ngoài
+        // Close the popup when clicking outside
         document.getElementById('custom-popup').addEventListener('click', function (e) {
             if (e.target === this) {
                 this.style.display = 'none';
@@ -895,7 +897,7 @@
                 setTimeout(() => {
                     curiousIcon.style.transform = '';
                 }, 300);
-                // Hiện popup khi click vào icon
+                // Show popup when clicking the icon
                 setTimeout(() => {
                     document.getElementById('custom-popup').style.display = 'flex';
                 }, 800);
