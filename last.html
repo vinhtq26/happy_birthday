@@ -488,8 +488,8 @@
             Whether you feel happy or sad, your family will always be a place you can come back to. 🌸</p>
         <p>We hope you grow into a kind young man — responsible, loving, and never giving up when things get tough.
             We believe in you. 💝</p>
-        <a href="#" class="goodbye-btn">Tap here <span id="curious-icon"
-                style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♂️✨</span></a>
+        <button type="button" class="goodbye-btn">Tap here <span id="curious-icon"
+                style="font-size:1.5em;vertical-align:middle;cursor:pointer;transition:transform 0.2s;">🕵️‍♂️✨</span></button>
         <canvas id="fireworks-canvas"
             style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;display:none;"></canvas>
         <div id="custom-popup"
@@ -506,7 +506,7 @@
                     <br>
                     Whenever you need it, come home — we’ll always be here for you. ❤️<br>
                 </p>
-                <button id="agree-popup"
+                <button id="agree-popup" type="button"
                     style="padding:0.7rem 2rem;font-size:1rem;background:linear-gradient(45deg,#ff69b4,#da70d6);color:white;border:none;border-radius:50px;cursor:pointer;box-shadow:0 2px 8px rgba(255,105,180,0.2);transition:background 0.3s,transform 0.2s;">Aww,
                     thank you</button>
             </div>
@@ -667,6 +667,10 @@
             // Make it softer (less eye-straining) but still colorful
             const MASTER_INTENSITY = 0.56;
 
+            // Reduce overall density (particles/rockets) to avoid glare
+            // 0.80 ~= 20% less dense
+            const DENSITY = 0.80;
+
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
@@ -693,6 +697,7 @@
                     const taper = 1 - 0.40 * currentFinaleProgress; // 1.0 -> 0.60
                     baseCount *= taper;
                 }
+                baseCount *= DENSITY;
                 const count = Math.floor(baseCount * randomBetween(0.85, 1.10));
                 const color = pick(colors);
 
@@ -718,7 +723,7 @@
 
                 // Optional second ring for fuller look
                 if (intensity === 'finale' && Math.random() < 0.30) {
-                    const ringCount = Math.floor(randomBetween(16, 26));
+                    const ringCount = Math.max(10, Math.floor(randomBetween(16, 26) * DENSITY));
                     const ringColor = pick(colors);
                     for (let i = 0; i < ringCount; i++) {
                         const angle = (Math.PI * 2 * i) / ringCount;
@@ -782,13 +787,13 @@
 
                 // Finale starts dense, then thins out near the end
                 const spawnInterval = intensity === 'finale'
-                    ? Math.round(160 + currentFinaleProgress * 290) // 160ms -> 450ms
-                    : 950;
+                    ? Math.round((160 + currentFinaleProgress * 290) / DENSITY) // fewer rockets
+                    : Math.round(950 / DENSITY);
 
                 if (t < END_AT_MS && now - lastRocketAt >= spawnInterval) {
                     spawnRocket(intensity);
                     lastRocketAt = now;
-                    const extraChance = 0.40 * (1 - 0.85 * currentFinaleProgress);
+                    const extraChance = 0.40 * (1 - 0.85 * currentFinaleProgress) * DENSITY;
                     if (intensity === 'finale' && Math.random() < extraChance) {
                         // Extra rockets during finale
                         spawnRocket(intensity);
@@ -891,16 +896,28 @@
             }
         }
 
-        // Add click effect for the button
-        document.querySelector('.goodbye-btn').addEventListener('click', function (e) {
-            e.preventDefault();
+        // Open popup (click + mobile tap)
+        function openPopup(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             setTimeout(() => {
                 document.getElementById('custom-popup').style.display = 'flex';
             }, 800);
-        });
+        }
+
+        const goodbyeBtn = document.querySelector('.goodbye-btn');
+        if (goodbyeBtn) {
+            goodbyeBtn.addEventListener('click', openPopup);
+            // Some mobile browsers navigate on tap for anchors; this keeps behavior stable.
+            goodbyeBtn.addEventListener('touchend', openPopup, { passive: false });
+        }
 
         // Launch fireworks when the popup button is clicked
-        document.getElementById('agree-popup').addEventListener('click', function () {
+        document.getElementById('agree-popup').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             playFireworksSfx();
             launchFireworks();
             setTimeout(() => {

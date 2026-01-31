@@ -163,11 +163,17 @@
         if (played) {
           hideTapToPlayPrompt();
           window.removeEventListener('pointerdown', resume);
+          window.removeEventListener('touchstart', resume);
+          window.removeEventListener('click', resume);
           window.removeEventListener('keydown', resume);
         }
       };
 
+      // Autoplay restrictions (especially on mobile Safari) require a user gesture.
+      // We listen to multiple gesture-like events for best compatibility.
       window.addEventListener('pointerdown', resume, { once: false, passive: true });
+      window.addEventListener('touchstart', resume, { once: false, passive: true });
+      window.addEventListener('click', resume, { once: false, passive: true });
       window.addEventListener('keydown', resume, { once: false });
     });
 
