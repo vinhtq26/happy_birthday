@@ -261,6 +261,7 @@
             border-radius: 15px;
             margin-bottom: 1rem;
             transition: transform 0.5s ease;
+            transform: scale(var(--hb-zoom, 1));
         }
 
         .memory-img.hb-portrait {
@@ -274,8 +275,24 @@
             background: rgba(255, 255, 255, 0.55);
         }
 
+        /* Zoom/crop style (used for image #5 so the portrait doesn't look small) */
+        .memory-img.hb-zoom {
+            object-fit: cover;
+            object-position: 50% 25%;
+            --hb-zoom: 1.12;
+        }
+
+        /* Make the portrait (image #5) feel less "small" inside its frame */
+        .memory-img.hb-tall {
+            height: 320px;
+        }
+
+        .memory-marquee .memory-img.hb-tall {
+            height: 280px;
+        }
+
         .memory-card:hover .memory-img {
-            transform: scale(1.05);
+            transform: scale(calc(var(--hb-zoom, 1) * 1.05));
         }
 
         .memory-date {
@@ -563,10 +580,20 @@
                 img.className = 'memory-img';
                 img.src = `./images/${file}`;
 
-                // Force show full photo for items 04-11 (avoid cropping faces)
-                // index is 0-based => 04 is index 3
-                if (index >= 3) {
+                // Index is 0-based:
+                // - Image #4 (index 3): keep "contain" to avoid awkward cropping.
+                // - Images #5-#11 (index 4-10): use zoom/crop so portraits don't look small.
+                if (index === 3) {
                     img.classList.add('hb-contain');
+                }
+
+                if (index >= 4) {
+                    img.classList.add('hb-zoom');
+                }
+
+                // Image #5 (index 4): a bit stronger zoom than the rest
+                if (index === 4) {
+                    img.style.setProperty('--hb-zoom', '1.18');
                 }
 
                 const n = index + 1;
