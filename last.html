@@ -598,12 +598,8 @@
                 imgs.push(img);
 
                 // Index is 0-based:
-                // - Image #4 (index 3): keep "contain" to avoid awkward cropping.
+                // - Images #1-#4 (index 0-3): keep the default layout.
                 // - Images #5-#11 (index 4-10): use zoom/crop so portraits don't look small.
-                if (index === 3) {
-                    img.classList.add('hb-contain');
-                }
-
                 if (index >= 4) {
                     img.classList.add('hb-zoom');
                 }

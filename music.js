@@ -1,4 +1,17 @@
 (() => {
+  // If this page is rendered inside an iframe (used by app.html), disable the
+  // per-page music player so we don't get duplicate toggles/prompts.
+  // The parent page will own the single continuous audio element.
+  const IN_IFRAME = (() => {
+    try {
+      return window.self !== window.top;
+    } catch {
+      return true;
+    }
+  })();
+
+  if (IN_IFRAME) return;
+
   const AUDIO_ID = 'bg-music';
   const TOGGLE_ID = 'music-toggle';
   const SESSION_KEY = 'hb_music_enabled';

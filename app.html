@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday ✨</title>
+  <link rel="stylesheet" href="music.css" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    /* Fullscreen iframe that hosts the existing pages */
+    #hb-frame {
+      width: 100vw;
+      height: 100vh;
+      border: 0;
+      display: block;
+      background: transparent;
+    }
+
+    /* Keep the global music toggle above the iframe */
+    #music-toggle {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 9999;
+    }
+
+    /* Small helper text on mobile if autoplay is blocked */
+    #hb-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 86px;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      color: #4a4a4a;
+      font-size: 13px;
+      user-select: none;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Continuous music lives here (parent page never reloads). -->
+  <audio id="bg-music" src="./music/happy-birthday.mp3"></audio>
+  <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle music" aria-pressed="false">♫</button>
+  <div id="hb-hint">Tap once to enable music</div>
+
+  <!-- Existing pages run inside the iframe and can navigate between themselves. -->
+  <iframe id="hb-frame" title="Happy Birthday" src="index.html" loading="eager"></iframe>
+
+  <script src="music.js"></script>
+  <script>
+    (function () {
+      const frame = document.getElementById('hb-frame');
+      const hint = document.getElementById('hb-hint');
+
+      function cleanupEmbeddedMusic(doc) {
+        if (!doc) return;
+        doc.getElementById('hb-tap-to-play')?.remove();
+        doc.getElementById('music-toggle')?.remove();
+        doc.getElementById('bg-music')?.remove();
+      }
+
+      // Remove per-page music UI from embedded pages whenever they load.
+      frame.addEventListener('load', () => {
+        try {
+          cleanupEmbeddedMusic(frame.contentDocument);
+        } catch {
+          // ignore
+        }
+      });
+
+      // Show a small hint if the user hasn't enabled audio yet.
+      // This does not bypass autoplay policy; it just guides the user.
+      const audio = document.getElementById('bg-music');
+      const showHint = () => {
+        if (!audio || !audio.paused) {
+          hint.style.display = 'none';
+          return;
+        }
+        hint.style.display = 'block';
+      };
+      setTimeout(showHint, 600);
+      window.addEventListener('visibilitychange', showHint);
+
+      // Any tap on the wrapper page should try to start music (best-effort).
+      const tryResume = async () => {
+        if (!audio || !audio.paused) return;
+        try {
+          await audio.play();
+        } catch {
+          // ignore
+        }
+        showHint();
+      };
+      window.addEventListener('pointerdown', tryResume, { passive: true });
+      window.addEventListener('touchstart', tryResume, { passive: true });
+      window.addEventListener('click', tryResume, { passive: true });
+    })();
+  </script>
+</body>
+
+</html>
