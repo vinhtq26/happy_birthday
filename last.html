@@ -190,10 +190,24 @@
             width: max-content;
             will-change: transform;
             animation: memoryMarquee var(--marquee-duration) linear infinite;
+            animation-play-state: paused;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
         }
 
-        .memory-marquee:hover .memory-track {
+        .memory-marquee.is-ready .memory-track {
+            animation-play-state: running;
+        }
+
+        .memory-marquee.is-paused .memory-track {
             animation-play-state: paused;
+        }
+
+        /* Pause on hover only on devices that actually support hover */
+        @media (hover: hover) and (pointer: fine) {
+            .memory-marquee.is-ready:hover .memory-track {
+                animation-play-state: paused;
+            }
         }
 
         .memory-set {
@@ -214,11 +228,11 @@
 
         @keyframes memoryMarquee {
             from {
-                transform: translateX(-50%);
+                transform: translate3d(0, 0, 0);
             }
 
             to {
-                transform: translateX(0);
+                transform: translate3d(-50%, 0, 0);
             }
         }
 
@@ -572,6 +586,8 @@
             // Clear existing
             setEl.innerHTML = '';
 
+            const imgs = [];
+
             imageFiles.forEach((file, index) => {
                 const card = document.createElement('div');
                 card.className = 'memory-card';
@@ -579,6 +595,7 @@
                 const img = document.createElement('img');
                 img.className = 'memory-img';
                 img.src = `./images/${file}`;
+                imgs.push(img);
 
                 // Index is 0-based:
                 // - Image #4 (index 3): keep "contain" to avoid awkward cropping.
@@ -617,6 +634,17 @@
                 card.appendChild(cap);
                 setEl.appendChild(card);
             });
+
+            // Wait until the newly created images finish loading, otherwise the track width
+            // can change mid-animation (causes a small "jitter"/jump).
+            const waitForImg = (imgEl) => new Promise((resolve) => {
+                if (!imgEl) return resolve();
+                if (imgEl.complete) return resolve();
+                imgEl.addEventListener('load', resolve, { once: true });
+                imgEl.addEventListener('error', resolve, { once: true });
+            });
+
+            return Promise.all(imgs.map(waitForImg));
         }
 
         // Infinite memory loop (left -> right)
@@ -635,11 +663,20 @@
             const clone = firstSet.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
             track.appendChild(clone);
+
+            // Tap/click an image to pause; tap/click again to resume
+            marquee.addEventListener('click', (e) => {
+                const target = e.target;
+                if (!(target instanceof Element)) return;
+                if (!target.classList.contains('memory-img')) return;
+                marquee.classList.toggle('is-paused');
+            });
         }
 
-        window.addEventListener('load', () => {
-            buildMemoryCards();
+        window.addEventListener('load', async () => {
+            await buildMemoryCards();
             initMemoryMarquee();
+            document.querySelector('.memory-marquee')?.classList.add('is-ready');
         });
 
         // Set name from config.js
